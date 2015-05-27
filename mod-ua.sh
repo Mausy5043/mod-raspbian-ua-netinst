@@ -51,11 +51,7 @@ echo ""
 echo "*********"
 echo "Put modifications in place"
 echo "*********"
-echo -n "installer-config.txt - "
-pushd overlay
-  cp -r * $netinst/
-popd
-echo "...ready."
+cp -r ./overlay/* $netinst/
 
 echo ""
 echo "*********"
