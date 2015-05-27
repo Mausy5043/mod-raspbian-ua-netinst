@@ -60,11 +60,10 @@ echo "*********"
 pushd $netinst/
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
+  sed -i "s/raspberrypi/${client}/" ./installer-config.txt
   ./clean.sh
   ./update.sh
   ./build.sh
-
-  sed -i "s/raspberrypi/${client}/" ./bootfs/installer-config.txt
 
   #./buildroot
 popd
