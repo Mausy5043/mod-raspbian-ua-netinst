@@ -1,0 +1,2 @@
+# m h dom mon dow user  command
+*/1 *   * * *   pi      /home/pi/raspboot/00-run-scripts.sh 2>/tmp/raspboot.err 1>&2
