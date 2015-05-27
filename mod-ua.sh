@@ -9,14 +9,20 @@ if [ "$client" = "" ]; then
   exit 1
 fi
 
+echo ""
+echo "*********"
 echo "Update the mod-ua files..."
+echo "*********"
 git pull
 git fetch origin
 git checkout $branch
 git reset --hard origin/$branch && \
 git clean -f -d
 
+echo ""
+echo "*********"
 echo "Update the raspbian-ua-netinst files..."
+echo "*********"
 pushd ../raspbian-ua-netinst/
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
@@ -27,12 +33,18 @@ git reset --hard origin/$branch && \
 git clean -f -d
 popd
 
+echo ""
+echo "*********"
 echo "Put modifications in place"
+echo "*********"
 cp installer-config.txt $netinst/
 cp post-install.txt $netinst/
 cp -r config $netinst/
 
+echo ""
+echo "*********"
 echo "Building image"
+echo "*********"
 pushd ../raspbian-ua-netinst/
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
