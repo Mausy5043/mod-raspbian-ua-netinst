@@ -1,0 +1,199 @@
+#! /bin/busybox sh
+# post-install.txt
+# finish set-up of basic server
+
+
+#####################
+#### PREPARATION ####
+#####################
+
+# This is where we setup variables and stuff that we need later in the script
+
+TIMEZONE="Europe/Amsterdam"
+LANG="en_US"
+CHARSET="UTF-8"
+LOCALE=$LANG"."$CHARSET
+LOCALEGEN=$LOCALE" "$CHARSET
+
+USER="pi"
+PASS="raspberry"
+INI_GROUP=$USER
+XTRA_GRPS="sudo,adm,users,video,dialout"
+
+USRHOME="home/"$USER
+RMTPATH=$hostname/$USRHOME
+# This is the server on my local LAN that holds the backup of /home for this RPi
+SRVRIP=10.0.1.220
+
+
+######################
+#### SYSTEM SETUP ####
+######################
+
+# Here we setup the generic system. Stuff that's needed to get a basic RPI up
+# and running stable.
+
+echo "Setting timezone : "$TIMEZONE
+echo $TIMEZONE > /rootfs/etc/timezone
+cp /rootfs/usr/share/zoneinfo/${TIMEZONE} /rootfs/etc/localtime
+
+echo -n "Setting locale : "$LOCALE
+echo "LANG="$LOCALE >> /rootfs/etc/default/locale
+echo " ... "$LOCALEGEN
+echo $LOCALEGEN > /rootfs/etc/locale.gen
+chroot /rootfs /usr/sbin/locale-gen
+
+echo "Setting SSH"
+sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
+# Don't allow root logins
+sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /rootfs/etc/ssh/sshd_config
+
+# recreate ssh keys (call me paranoid)
+echo "Regenerating SSH-keys..."
+rm /rootfs/etc/ssh/ssh_host_*
+chroot /rootfs /usr/sbin/dpkg-reconfigure openssh-server
+
+echo "Preparing /etc/hosts file..."
+echo "::1             localhost ip6-localhost ip6-loopback" >> /rootfs/etc/hosts
+echo "fe00::0         ip6-localnet" >> /rootfs/etc/hosts
+echo "ff00::0         ip6-mcastprefix" >> /rootfs/etc/hosts
+echo "ff02::1         ip6-allnodes" >> /rootfs/etc/hosts
+echo "ff02::2         ip6-allrouters" >> /rootfs/etc/hosts
+
+# I don't need all those terminals
+echo "Disabling terminals..."
+sed -i 's/2:23:respawn/\#&/' /rootfs/etc/inittab
+sed -i 's/3:23:respawn/\#&/' /rootfs/etc/inittab
+sed -i 's/4:23:respawn/\#&/' /rootfs/etc/inittab
+sed -i 's/5:23:respawn/\#&/' /rootfs/etc/inittab
+sed -i 's/6:23:respawn/\#&/' /rootfs/etc/inittab
+sed -i 's/T0:23:respawn/\#&/' /rootfs/etc/inittab
+
+# Don't need sound
+echo "Disabling sound"
+sed -i 's/snd-bcm/\#&/' /rootfs/etc/modules
+
+echo "Creating extra mountpoints..."
+mkdir -p /rootfs/mnt/share1
+mkdir -p /rootfs/mnt/backup
+# mount /var/log and /tmp as tmpfs
+echo "tmpfs /tmp     tmpfs nodev,nosuid,mode=1777,size=64M              0 0" >> /rootfs/etc/fstab
+echo "tmpfs /var/log tmpfs defaults,noatime,nosuid,mode=0755,size=96M  0 0" >> /rootfs/etc/fstab
+echo "# mountpoint for systemlogs and backups" >> /rootfs/etc/fstab
+echo "10.0.1.220:/srv/array1/backup /mnt/backup nfs4 nouser,atime,rw,dev,exec,suid,noauto 0   0" >> /rootfs/etc/fstab
+echo "10.0.1.220:/srv/array1/dataspool /mnt/share1 nfs4 nouser,atime,rw,dev,exec,suid,auto 0  0" >> /rootfs/etc/fstab
+
+echo -n "Modifying systemfiles: "
+# to get nfs working we need to blacklist a module
+echo -n "[/etc/modprobe.d/$hostname-blacklist.conf] "
+echo "blacklist rpcsec_gss_krb5" > /rootfs/etc/modprobe.d/$hostname-blacklist.conf
+
+# get more memory
+echo -n "[/boot/config.txt] "
+echo "gpu_mem=16"         >> /rootfs/boot/config.txt
+# Scaled CPU frequency
+echo ""                   >> /rootfs/boot/config.txt
+echo "arm_freq=950"       >> /rootfs/boot/config.txt
+echo "core_freq=450"      >> /rootfs/boot/config.txt
+echo "sdram_freq=450"     >> /rootfs/boot/config.txt
+echo "over_voltage=6"     >> /rootfs/boot/config.txt
+echo ""                   >> /rootfs/boot/config.txt
+echo "arm_freq_min=700"   >> /rootfs/boot/config.txt
+echo "core_freq_min=250"  >> /rootfs/boot/config.txt
+echo "sdram_freq_min=400" >> /rootfs/boot/config.txt
+echo "over_voltage_min=0" >> /rootfs/boot/config.txt
+echo ""                   >> /rootfs/boot/config.txt
+echo "force_turbo=0"      >> /rootfs/boot/config.txt
+
+echo "."
+
+# raspi-copies-and-fills is not available in jessie so we install it here
+echo -n "Installing raspi-copies-and-fills package... "
+chroot /rootfs /usr/bin/apt-get -y install raspi-copies-and-fills &>/dev/null
+if [ $? -eq 0 ]; then
+    echo "OK"
+else
+    echo "FAILED !"
+fi
+
+
+####################
+#### USER SETUP ####
+####################
+
+# Here we setup the generic user `pi` and the luser environment.
+
+echo "Creating group : "$INI_GROUP
+chroot /rootfs /usr/sbin/groupadd $INI_GROUP
+
+echo -n "Creating user  : "$USER
+chroot /rootfs /usr/sbin/useradd $USER -s /bin/bash -m -g $INI_GROUP -G $XTRA_GRPS
+echo " ... and setting password as : "$PASS
+echo "$USER:$PASS" | chroot /rootfs /usr/sbin/chpasswd
+
+echo "Set-up cron jobs..."
+CRONTMP=$USRHOME/cron.tmp
+# this needs to be removed later:
+echo "42  * * * * /home/pi/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" >> /rootfs/$CRONTMP
+echo "50 23 * * * /home/$USER/bin/backuphome.sh" >> /rootfs/$CRONTMP
+chroot /rootfs /usr/bin/crontab -u $USER /$CRONTMP
+rm /rootfs/$CRONTMP
+
+# default settings for screen
+echo "shell -\$SHELL" > /rootfs/$USRHOME/.screenrc
+echo "defscrollback 10000" >> /rootfs/$USRHOME/.screenrc
+echo "hardstatus on" >> /rootfs/$USRHOME/.screenrc
+echo "hardstatus alwayslastline" >> /rootfs/$USRHOME/.screenrc
+echo "hardstatus string \"%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %l %{..Y} %Y-%m-%d %c \"" >> /rootfs/$USRHOME/.screenrc
+
+echo "Set-up sudo..."
+sed -i 's/\%sudo\tALL=(ALL:ALL)/&\ NOPASSWD:/' /rootfs/etc/sudoers
+
+echo "Copy configuration files..."
+for f in /bootfs/config/rootfs/*; do
+  # following must be busybox sh  compatible! Cant use bash replacements :-(
+  g=$(echo $(basename $f) | sed 's/@/\//g')
+  echo $f " --> " $g
+  # path must already exist for this to work:
+  cp $f /rootfs/$g
+done
+
+# ssh
+mkdir -m 0700 -p /rootfs/$USRHOME/.ssh
+
+# GIT
+echo "Create raspboot..."
+mkdir /rootfs/$USRHOME/raspboot
+echo "Pull sources from github..."
+chroot /rootfs /usr/bin/git clone -b master https://github.com/Mausy5043/raspboot.git /$USRHOME/raspboot
+echo master > /rootfs/$USRHOME/.raspboot.branch
+echo "Set permissions..."
+chmod -R 0755 /rootfs/$USRHOME/raspboot
+
+echo "Change ownership..."
+chroot /rootfs /bin/chown -R $USER:$INI_GROUP /$USRHOME
+
+
+######################
+#### SERVER SETUP ####
+######################
+
+# This is where specifics for the server are setup
+# Install CPU governor
+chmod +x /rootfs/etc/init.d/switch_cpu_governor
+chroot /rootfs /usr/sbin/update-rc.d switch_cpu_governor defaults
+
+
+####################
+#### FINALISING ####
+####################
+
+echo -n "********** SYSTEM READY **********"
+
+date
+# put the logfile somewhere we can find it, so we can mount /var/log with tmpfs
+sync; sync
+cp $LOGFILE /rootfs/$USRHOME/raspbian-ua-netinst.log
+chmod 0644  /rootfs/$USRHOME/raspbian-ua-netinst.log
+chroot /rootfs /bin/chown $USER:$INI_GROUP /$USRHOME/raspbian-ua-netinst.log
+#[EOF]
