@@ -37,41 +37,33 @@ echo ""
 echo "*********"
 echo "Update the raspbian-ua-netinst files..."
 echo "*********"
-pushd ../raspbian-ua-netinst/
-rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+pushd $netinst/
+  rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
-git pull
-git fetch origin
-git checkout $branch
-git reset --hard origin/$branch && \
-git clean -f -d
+  git pull
+  git fetch origin
+  git checkout $branch
+  git reset --hard origin/$branch && \
+  git clean -f -d
 popd
 
 echo ""
 echo "*********"
 echo "Put modifications in place"
 echo "*********"
-echo -n "installer-config.txt - "
-cp installer-config.txt $netinst/
-echo -n "post-install.txt - "
-cp post-install.txt $netinst/
-echo -n "config/ - "
-cp -r config $netinst/
-echo "...ready."
+cp -r ./overlay/* $netinst/
 
 echo ""
 echo "*********"
 echo "Building image"
 echo "*********"
-pushd ../raspbian-ua-netinst/
-rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+pushd $netinst/
+  rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
-./clean.sh
-./update.sh
-./build.sh
+  sed -i "s/raspberrypi/${client}/" ./installer-config.txt
+  ./clean.sh
+  ./update.sh
+  ./build.sh
 
-sed -i "s/raspberrypi/${client}/" ./bootfs/installer-config.txt
-
-#./buildroot
-
+  #./buildroot
 popd
