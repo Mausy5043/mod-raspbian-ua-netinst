@@ -4,11 +4,11 @@ client=$1
 netinst="../raspbian-ua-netinst"
 branch="../netinst.branch"
 
-if [ ! -d $netinst]; then
+if [ ! -d $netinst ]; then
   echo "A clone of raspbian-ua-netinst could not be found."
   exit 1
 fi
-if [ ! -d $branch]; then
+if [ ! -d $branch ]; then
   echo "Could not find "$branch
   echo "This file should contain the name of the branch to be used."
   echo "Both the raspbian-ua-netinst branch and the mod-raspbian-ua-netinst branch must have the same name."
