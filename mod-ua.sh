@@ -2,7 +2,21 @@
 
 client=$1
 netinst="../raspbian-ua-netinst"
-branch=$(cat ../netinst.branch)
+branch="../netinst.branch"
+
+if [ ! -d $netinst]; then
+  echo "A clone of raspbian-ua-netinst could not be found."
+  exit 1
+fi
+if [ ! -d $branch]; then
+  echo "Could not find "$branch
+  echo "This file should contain the name of the branch to be used."
+  echo "Both the raspbian-ua-netinst branch and the mod-raspbian-ua-netinst branch must have the same name."
+  exit 1
+fi
+branch=$(cat $branch)
+
+
 
 if [ "$client" = "" ]; then
   echo "Usage: mod-ua.sh <hostname>"
@@ -37,9 +51,13 @@ echo ""
 echo "*********"
 echo "Put modifications in place"
 echo "*********"
+echo -n "installer-config.txt - "
 cp installer-config.txt $netinst/
+echo -n "post-install.txt - "
 cp post-install.txt $netinst/
+echo -n "config/ - "
 cp -r config $netinst/
+echo "...ready."
 
 echo ""
 echo "*********"
