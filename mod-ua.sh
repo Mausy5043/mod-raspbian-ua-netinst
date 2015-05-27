@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 client=$1
 netinst="../raspbian-ua-netinst"
