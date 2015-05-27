@@ -30,9 +30,8 @@ same directory as where this repository resides:
 ## Usage
 1. `cd mod-raspbian-ua-netinst`
 2. `mod-ua.sh <hostname>`
-
-- The repos are updated to the current version and the chosen branch is selected.
-- Files contained in the directory `overlay` are copied to the raspbian-ua-netinst directory.
-- The raspbian-ua-netinst image is built by executing the `clean.sh`, `update.sh` and `build.sh`.
-- !! If `buildroot.sh` is required, then this needs to be done manually.
-- 
+3. the rest is automatic:
+  - The repos are updated to the current version and the chosen branch is selected.
+  - Files contained in the directory `overlay` are copied to the raspbian-ua-netinst directory.
+  - The raspbian-ua-netinst image is built by executing the `clean.sh`, `update.sh` and `build.sh`.
+  - Attention: If `buildroot.sh` is required, then this needs to be done manually.
