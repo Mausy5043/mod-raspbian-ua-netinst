@@ -37,7 +37,7 @@ echo ""
 echo "*********"
 echo "Update the raspbian-ua-netinst files..."
 echo "*********"
-pushd ../raspbian-ua-netinst/
+pushd $netinst/
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
   git pull
@@ -61,7 +61,7 @@ echo ""
 echo "*********"
 echo "Building image"
 echo "*********"
-pushd ../raspbian-ua-netinst/
+pushd $netinst/
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
   ./clean.sh
