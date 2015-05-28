@@ -133,8 +133,6 @@ echo "$USER:$PASS" | chroot /rootfs /usr/sbin/chpasswd
 
 echo "Set-up cron jobs..."
 CRONTMP=$USRHOME/cron.tmp
-# this needs to be removed later:
-echo "42  * * * * /home/pi/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" >> /rootfs/$CRONTMP
 echo "50 23 * * * /home/$USER/bin/backuphome.sh" >> /rootfs/$CRONTMP
 chroot /rootfs /usr/bin/crontab -u $USER /$CRONTMP
 rm /rootfs/$CRONTMP
@@ -196,4 +194,3 @@ sync; sync
 cp $LOGFILE /rootfs/$USRHOME/raspbian-ua-netinst.log
 chmod 0644  /rootfs/$USRHOME/raspbian-ua-netinst.log
 chroot /rootfs /bin/chown $USER:$INI_GROUP /$USRHOME/raspbian-ua-netinst.log
-#[EOF]
