@@ -11,7 +11,7 @@ fi
 if [ ! -e $branch ]; then
   echo "Could not find "$branch
   echo "This file should contain the name of the branch to be used."
-  echo "Both the raspbian-ua-netinst branch and the mod-raspbian-ua-netinst branch must have the same name."
+  echo "Both the branchname of raspbian-ua-netinst and the branchname of mod-raspbian-ua-netinst must be the same."
   exit 1
 fi
 branch=$(cat $branch)
