@@ -4,7 +4,7 @@ client=$1
 netinst="../raspbian-ua-netinst"
 branch="../netinst.branch"
 
-# Check if the `raspbian-ua-netinst` directory is present. 
+# Check if the `raspbian-ua-netinst` directory is present.
 if [ ! -d $netinst ]; then
   echo "A clone of raspbian-ua-netinst could not be found."
   exit 1
@@ -41,7 +41,7 @@ echo "*********"
 echo "Update the raspbian-ua-netinst files..."
 echo "*********"
 pushd $netinst/
-  # Check exitcode of prev command. 
+  # Check exitcode of prev command.
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
   git pull
@@ -62,7 +62,7 @@ echo "*********"
 echo "Building image"
 echo "*********"
 pushd $netinst/
-  # Check exitcode of prev command. 
+  # Check exitcode of prev command.
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
   sed -i "s/raspberrypi/${client}/" ./installer-config.txt
@@ -71,6 +71,6 @@ pushd $netinst/
   ./build.sh
   # By default don't `./buildroot`
   #./buildroot.sh
-  
+
   # At the end we don't `./clean.sh` so we can use the files in `./bootfs/` directly.
 popd
