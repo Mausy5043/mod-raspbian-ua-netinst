@@ -1,9 +1,12 @@
 # Useful OS extensions
 packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync,sudo"
+
 # Support for `raspdiagd`
 packages="$packages,python,git"
+
 # Handy utilities
 packages="$packages,bc,htop,lsof,nano,screen,stress"
+
 # OSX support
 packages="$packages,avahi-daemon,libnss-mdns"
 hostname=raspberrypi
