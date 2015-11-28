@@ -80,8 +80,8 @@ mkdir -p /rootfs/mnt/backup
 echo "tmpfs /tmp     tmpfs nodev,nosuid,mode=1777,size=64M              0 0" >> /rootfs/etc/fstab
 echo "tmpfs /var/log tmpfs defaults,noatime,nosuid,mode=0755,size=96M  0 0" >> /rootfs/etc/fstab
 echo "# mountpoint for systemlogs and backups" >> /rootfs/etc/fstab
-echo "10.0.1.220:/srv/array1/backup /mnt/backup nfs4 nouser,atime,rw,dev,exec,suid,noauto 0   0" >> /rootfs/etc/fstab
-echo "10.0.1.220:/srv/array1/dataspool /mnt/share1 nfs4 nouser,atime,rw,dev,exec,suid,auto 0  0" >> /rootfs/etc/fstab
+echo "boson.lan:/srv/array1/backup /mnt/backup nfs4 nouser,atime,rw,dev,exec,suid,noauto 0   0" >> /rootfs/etc/fstab
+echo "boson.lan:/srv/array1/dataspool /mnt/share1 nfs4 nouser,atime,rw,dev,exec,suid,auto 0  0" >> /rootfs/etc/fstab
 
 echo -n "Modifying systemfiles: "
 # to get nfs working we need to blacklist a module
