@@ -72,6 +72,8 @@ sed -i 's/T0:23:respawn/\#&/' /rootfs/etc/inittab
 # Don't need sound
 echo "Disabling sound"
 sed -i 's/snd-bcm/\#&/' /rootfs/etc/modules
+# Add hardware random number generator
+echo "bcm2708-rng" >> /rootfs/etc/modules
 
 echo "Creating extra mountpoints..."
 mkdir -p /rootfs/mnt/share1

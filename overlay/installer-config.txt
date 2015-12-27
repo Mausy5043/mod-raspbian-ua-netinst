@@ -5,7 +5,7 @@ packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync,sudo"
 packages="$packages,python,git"
 
 # Handy utilities
-packages="$packages,bc,htop,lsof,nano,screen,stress"
+packages="$packages,bc,htop,lsof,nano,screen,stress,rng-tools"
 
 # OSX support
 packages="$packages,avahi-daemon,libnss-mdns"
