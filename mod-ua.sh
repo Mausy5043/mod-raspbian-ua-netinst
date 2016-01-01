@@ -32,8 +32,8 @@ echo "Update the mod-ua files..."
 echo "*********"
 git pull
 git fetch origin
-git checkout $branch
-git reset --hard origin/$branch && \
+git checkout "$branch"
+git reset --hard "origin/$branch" && \
 git clean -f -d
 
 echo ""
