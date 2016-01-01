@@ -38,9 +38,9 @@ echo $TIMEZONE > /rootfs/etc/timezone
 cp /rootfs/usr/share/zoneinfo/${TIMEZONE} /rootfs/etc/localtime
 
 echo -n "Setting locale : "$LOCALE
-echo "LANG="$LOCALE >> /rootfs/etc/default/locale
-echo " ... "$LOCALEGEN
-echo $LOCALEGEN > /rootfs/etc/locale.gen
+echo "LANG=$LOCALE" >> /rootfs/etc/default/locale
+echo " ... $LOCALEGEN"
+echo "$LOCALEGEN" > /rootfs/etc/locale.gen
 chroot /rootfs /usr/sbin/locale-gen
 
 echo "Setting SSH"
@@ -88,7 +88,7 @@ echo "boson.lan:/srv/array1/dataspool /mnt/share1 nfs4 nouser,atime,rw,dev,exec,
 echo -n "Modifying systemfiles: "
 # to get nfs working we need to blacklist a module
 echo -n "[/etc/modprobe.d/$hostname-blacklist.conf] "
-echo "blacklist rpcsec_gss_krb5" > /rootfs/etc/modprobe.d/$hostname-blacklist.conf
+echo "blacklist rpcsec_gss_krb5" > "/rootfs/etc/modprobe.d/$hostname-blacklist.conf"
 
 # get more memory
 echo -n "[/boot/config.txt] "
