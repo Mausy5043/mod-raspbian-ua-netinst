@@ -2,13 +2,16 @@
 packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync,sudo"
 
 # Support for `raspdiagd`
-packages="$packages,python,git"
+packages="$packages,python,git,gnuplot,mysql-client,python-mysqldb"
 
 # Handy utilities
-packages="$packages,bc,htop,lsof,nano,screen,stress"
+packages="$packages,bc,htop,lsof,nano,screen,stress,rng-tools"
 
 # OSX support
 packages="$packages,avahi-daemon,libnss-mdns"
 hostname=raspberrypi
 cmdline="dwc_otg.lpm_enable=0 console=tty1 noatime loglevel=2 cgroup_enable=memory elevator=noop"
 label=$hostname
+
+# start hardware random number generator
+modprobe bcm2708-rng
