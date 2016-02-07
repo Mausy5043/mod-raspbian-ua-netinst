@@ -18,7 +18,7 @@ same directory as where this repository resides:
 
 ```
   user@host:~/mod-raspbian-ua-netinst$ cat ../netinst.branch
-  v1.0.x
+  v1.1.x
   user@host:~/mod-raspbian-ua-netinst$
 ```
 
