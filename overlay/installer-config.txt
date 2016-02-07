@@ -8,7 +8,7 @@ packages="$packages,python,git,gnuplot,mysql-client,python-mysqldb"
 packages="$packages,bc,htop,lsof,nano,screen,stress,rng-tools"
 
 # OSX support
-packages="$packages,avahi-daemon,libnss-mdns"
+#packages="$packages,avahi-daemon,libnss-mdns"
 hostname=raspberrypi
 cmdline="dwc_otg.lpm_enable=0 console=tty1 noatime loglevel=2 cgroup_enable=memory elevator=noop"
 label=$hostname
