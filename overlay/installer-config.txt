@@ -11,7 +11,7 @@ packages="$packages,bc,htop,lsof,nano,screen,stress,dieharder"
 #packages="$packages,avahi-daemon,libnss-mdns"
 hostname=raspberrypi
 cmdline="dwc_otg.lpm_enable=0 console=tty1 noatime loglevel=2 cgroup_enable=memory elevator=noop"
-label=$hostname
+boot_volume_label=$hostname
 
 
 # BCM2708-RNG
