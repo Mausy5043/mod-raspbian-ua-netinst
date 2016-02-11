@@ -43,10 +43,11 @@ echo " ... $LOCALEGEN"
 echo "$LOCALEGEN" > /rootfs/etc/locale.gen
 chroot /rootfs /usr/sbin/locale-gen
 
+# HWRNG will be installed by the installer itself.
 # Add hardware random number generator
-echo "bcm2708-rng" >> /rootfs/etc/modules
+#echo "bcm2708-rng" >> /rootfs/etc/modules
 # start hardware random number generator
-modprobe bcm2708-rng
+#modprobe bcm2708-rng
 
 echo "Setting SSH"
 sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
