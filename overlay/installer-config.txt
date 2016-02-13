@@ -9,13 +9,7 @@ packages="$packages,bc,htop,lsof,nano,screen,stress,dieharder"
 
 # OSX support
 #packages="$packages,avahi-daemon,libnss-mdns"
+
 hostname=raspberrypi
 cmdline="dwc_otg.lpm_enable=0 console=tty1 noatime loglevel=2 cgroup_enable=memory elevator=noop"
 boot_volume_label=$hostname
-
-
-# BCM2708-RNG
-# $ dpkg --search bcm2708-rng.ko
-# linux-image-3.18.0-trunk-rpi: /lib/modules/3.18.0-trunk-rpi/kernel/drivers/char/hw_random/bcm2708-rng.ko
-# the module `bcm2708-rng.ko` is delivered by the package `linux-image-3.18.0-trunk-rpi`
-#
