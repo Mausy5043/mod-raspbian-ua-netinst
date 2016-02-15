@@ -25,7 +25,7 @@ same directory as where this repository resides:
 ## Installing
 1. Clone `debian-pi\raspbian-ua-netinst`
 2. Clone `Mausy5043\mod-raspbian-ua-netinst`
-3. `echo "v1.0.x" > netinst.branch   # this defines the branch to be used`
+3. `echo "v1.1.x" > netinst.branch   # this defines the branch to be used`
 
 ## Usage
 1. `cd mod-raspbian-ua-netinst`
