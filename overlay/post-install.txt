@@ -43,12 +43,6 @@ echo " ... $LOCALEGEN"
 echo "$LOCALEGEN" > /rootfs/etc/locale.gen
 chroot /rootfs /usr/sbin/locale-gen
 
-# HWRNG will be installed by the installer itself.
-# Add hardware random number generator
-#echo "bcm2708-rng" >> /rootfs/etc/modules
-# start hardware random number generator
-#modprobe bcm2708-rng
-
 echo "Setting SSH"
 sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
 # Don't allow root logins
@@ -61,23 +55,23 @@ sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /rootfs/etc/ssh/sshd_config
 
 echo "Preparing /etc/hosts file..."
 echo "::1             localhost ip6-localhost ip6-loopback" >> /rootfs/etc/hosts
-echo "fe00::0         ip6-localnet" >> /rootfs/etc/hosts
-echo "ff00::0         ip6-mcastprefix" >> /rootfs/etc/hosts
-echo "ff02::1         ip6-allnodes" >> /rootfs/etc/hosts
-echo "ff02::2         ip6-allrouters" >> /rootfs/etc/hosts
+echo "fe00::0         ip6-localnet"     >> /rootfs/etc/hosts
+echo "ff00::0         ip6-mcastprefix"  >> /rootfs/etc/hosts
+echo "ff02::1         ip6-allnodes"     >> /rootfs/etc/hosts
+echo "ff02::2         ip6-allrouters"   >> /rootfs/etc/hosts
 
 # I don't need all those terminals
 echo "Disabling terminals..."
-sed -i 's/2:23:respawn/\#&/' /rootfs/etc/inittab
-sed -i 's/3:23:respawn/\#&/' /rootfs/etc/inittab
-sed -i 's/4:23:respawn/\#&/' /rootfs/etc/inittab
-sed -i 's/5:23:respawn/\#&/' /rootfs/etc/inittab
-sed -i 's/6:23:respawn/\#&/' /rootfs/etc/inittab
+sed -i 's/2:23:respawn/\#&/'  /rootfs/etc/inittab
+sed -i 's/3:23:respawn/\#&/'  /rootfs/etc/inittab
+sed -i 's/4:23:respawn/\#&/'  /rootfs/etc/inittab
+sed -i 's/5:23:respawn/\#&/'  /rootfs/etc/inittab
+sed -i 's/6:23:respawn/\#&/'  /rootfs/etc/inittab
 sed -i 's/T0:23:respawn/\#&/' /rootfs/etc/inittab
 
 # Don't need sound
 echo "Disabling sound"
-sed -i 's/snd-bcm/\#&/' /rootfs/etc/modules
+sed -i 's/snd-bcm/\#&/'       /rootfs/etc/modules
 
 echo "Creating extra mountpoints..."
 mkdir -p /rootfs/mnt/share1
@@ -91,8 +85,8 @@ echo "boson.lan:/srv/array1/dataspool /mnt/share1 nfs4 nouser,atime,rw,dev,exec,
 
 echo -n "Modifying systemfiles: "
 # to get nfs working we need to blacklist a module
-echo -n "[/etc/modprobe.d/$hostname-blacklist.conf] "
-echo "blacklist rpcsec_gss_krb5" > "/rootfs/etc/modprobe.d/$hostname-blacklist.conf"
+#echo -n "[/etc/modprobe.d/$hostname-blacklist.conf] "
+#echo "blacklist rpcsec_gss_krb5" > "/rootfs/etc/modprobe.d/$hostname-blacklist.conf"
 
 # get more memory
 echo -n "[/boot/config.txt] "
@@ -139,7 +133,7 @@ echo "$USER:$PASS" | chroot /rootfs /usr/sbin/chpasswd
 
 echo "Set-up cron jobs..."
 CRONTMP=$USRHOME/cron.tmp
-echo "50 23 * * * /home/$USER/bin/backuphome.sh" >> /rootfs/$CRONTMP
+echo "50 23 * * * $USRHOME/bin/backuphome.sh" >> /rootfs/$CRONTMP
 chroot /rootfs /usr/bin/crontab -u $USER /$CRONTMP
 rm /rootfs/$CRONTMP
 
@@ -170,7 +164,7 @@ echo "Create raspboot..."
 mkdir /rootfs/$USRHOME/raspboot
 echo "Pull sources from github..."
 chroot /rootfs /usr/bin/git clone -b master https://github.com/Mausy5043/raspboot.git /$USRHOME/raspboot
-echo master > /rootfs/$USRHOME/.raspboot.branch
+echo "master" > /rootfs/$USRHOME/.raspboot.branch
 echo "Set permissions..."
 chmod -R 0755 /rootfs/$USRHOME/raspboot
 
