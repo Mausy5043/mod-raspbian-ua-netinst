@@ -43,15 +43,21 @@ echo " ... $LOCALEGEN"
 echo "$LOCALEGEN" > /rootfs/etc/locale.gen
 chroot /rootfs /usr/sbin/locale-gen
 
+# HWRNG will be installed by the installer itself.
+# Add hardware random number generator
+#echo "bcm2708-rng" >> /rootfs/etc/modules
+# start hardware random number generator
+#modprobe bcm2708-rng
+
 echo "Setting SSH"
 sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
 # Don't allow root logins
 sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /rootfs/etc/ssh/sshd_config
 
 # recreate ssh keys (call me paranoid)
-echo "Regenerating SSH-keys..."
-rm /rootfs/etc/ssh/ssh_host_*
-chroot /rootfs /usr/sbin/dpkg-reconfigure openssh-server
+# echo "Regenerating SSH-keys..."
+# rm /rootfs/etc/ssh/ssh_host_*
+# chroot /rootfs /usr/sbin/dpkg-reconfigure openssh-server
 
 echo "Preparing /etc/hosts file..."
 echo "::1             localhost ip6-localhost ip6-loopback" >> /rootfs/etc/hosts
@@ -72,8 +78,6 @@ sed -i 's/T0:23:respawn/\#&/' /rootfs/etc/inittab
 # Don't need sound
 echo "Disabling sound"
 sed -i 's/snd-bcm/\#&/' /rootfs/etc/modules
-# Add hardware random number generator
-echo "bcm2708-rng" >> /rootfs/etc/modules
 
 echo "Creating extra mountpoints..."
 mkdir -p /rootfs/mnt/share1
