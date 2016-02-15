@@ -2,4 +2,4 @@
 # Execute this command every minute during the first boot.
 # (@reboot doesn't work on the very first boot)
 # `raspboot` will replace this file with an @reboot job.
-*/1 *   * * *   pi      /home/pi/raspboot/00-run-scripts.sh 2>/tmp/raspboot.err 1>&2
+*/1 *   * * *   pi      /home/pi/raspboot/00-run-scripts.sh 2>/home/pi/raspboot.log 1>&2
