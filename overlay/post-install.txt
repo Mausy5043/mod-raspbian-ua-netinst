@@ -9,13 +9,11 @@
 
 # This is where we setup variables and stuff that we need later in the script
 
-#TIMEZONE="Europe/Amsterdam"
 LANG="en_US"
 CHARSET="UTF-8"
 LOCALE=$LANG"."$CHARSET
 LOCALEGEN=$LOCALE" "$CHARSET
 
-#PASS="raspberry"
 INI_GROUP=$USER
 XTRA_GRPS="sudo,adm,users,video,dialout"
 
@@ -35,13 +33,11 @@ SRVRIP=boson.lan
 
 echo "Setting SSH"
 sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
-# Don't allow root logins
-# sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /rootfs/etc/ssh/sshd_config
 
 # recreate ssh keys (call me paranoid)
-# echo "Regenerating SSH-keys..."
-# rm /rootfs/etc/ssh/ssh_host_*
-# chroot /rootfs /usr/sbin/dpkg-reconfigure openssh-server
+echo "Regenerating SSH-keys..."
+rm /rootfs/etc/ssh/ssh_host_*
+chroot /rootfs /usr/sbin/dpkg-reconfigure openssh-server
 
 echo "Preparing /etc/hosts file..."
 echo "::1             localhost ip6-localhost ip6-loopback" >> /rootfs/etc/hosts
@@ -73,7 +69,7 @@ echo "# mountpoint for systemlogs and backups" >> /rootfs/etc/fstab
 echo "boson.lan:/srv/array1/backup /mnt/backup nfs4 nouser,atime,rw,dev,exec,suid,noauto 0   0" >> /rootfs/etc/fstab
 echo "boson.lan:/srv/array1/dataspool /mnt/share1 nfs4 nouser,atime,rw,dev,exec,suid,auto 0  0" >> /rootfs/etc/fstab
 
-echo -n "Modifying systemfiles: "
+#echo -n "Modifying systemfiles: "
 # to get nfs working we need to blacklist a module
 #echo -n "[/etc/modprobe.d/$hostname-blacklist.conf] "
 #echo "blacklist rpcsec_gss_krb5" > "/rootfs/etc/modprobe.d/$hostname-blacklist.conf"
@@ -97,13 +93,13 @@ echo "force_turbo=0"      >> /rootfs/boot/config.txt
 echo "."
 
 # raspi-copies-and-fills is not available in jessie so we install it here
-#echo -n "Installing raspi-copies-and-fills package... "
-#chroot /rootfs /usr/bin/apt-get -y install raspi-copies-and-fills &>/dev/null
-#if [ $? -eq 0 ]; then
-#    echo "OK"
-#else
-#    echo "FAILED !"
-#fi
+echo -n "Installing raspi-copies-and-fills package... "
+chroot /rootfs /usr/bin/apt-get -y install raspi-copies-and-fills &>/dev/null
+if [ $? -eq 0 ]; then
+    echo "OK"
+else
+    echo "FAILED !"
+fi
 
 
 ####################
