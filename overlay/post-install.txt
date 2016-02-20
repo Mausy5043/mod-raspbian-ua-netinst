@@ -15,11 +15,11 @@ CHARSET="UTF-8"
 LOCALE=$LANG"."$CHARSET
 LOCALEGEN=$LOCALE" "$CHARSET
 
-USER="pi"
-PASS="raspberry"
+#PASS="raspberry"
 INI_GROUP=$USER
 XTRA_GRPS="sudo,adm,users,video,dialout"
 
+USER="pi"
 USRHOME="home/"$USER
 RMTPATH=$hostname/$USRHOME
 # This is the server on my local LAN that holds the backup of /home for this RPi
@@ -32,16 +32,6 @@ SRVRIP=boson.lan
 
 # Here we setup the generic system. Stuff that's needed to get a basic RPI up
 # and running stable.
-
-#echo "Setting timezone : "$TIMEZONE
-#echo $TIMEZONE > /rootfs/etc/timezone
-#cp /rootfs/usr/share/zoneinfo/${TIMEZONE} /rootfs/etc/localtime
-
-#echo -n "Setting locale : "$LOCALE
-#echo "LANG=$LOCALE" >> /rootfs/etc/default/locale
-#echo " ... $LOCALEGEN"
-#echo "$LOCALEGEN" > /rootfs/etc/locale.gen
-#chroot /rootfs /usr/sbin/locale-gen
 
 echo "Setting SSH"
 sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
@@ -144,8 +134,8 @@ echo "hardstatus on" >> /rootfs/$USRHOME/.screenrc
 echo "hardstatus alwayslastline" >> /rootfs/$USRHOME/.screenrc
 echo "hardstatus string \"%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %l %{..Y} %Y-%m-%d %c \"" >> /rootfs/$USRHOME/.screenrc
 
-#echo "Set-up sudo..."
-#sed -i 's/\%sudo\tALL=(ALL:ALL)/&\ NOPASSWD:/' /rootfs/etc/sudoers
+echo "Set-up sudo..."
+echo -n "$USER ALL = (ALL) NOPASSWD: ALL" > "/rootfs/etc/sudoers.d/$USER"
 
 echo "Copy configuration files..."
 for f in /bootfs/config/rootfs/*; do
