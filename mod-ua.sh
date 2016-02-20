@@ -18,7 +18,8 @@ if [ ! -e $branch ]; then
   echo "Both the branchname of raspbian-ua-netinst and the branchname of mod-raspbian-ua-netinst must be the same."
   exit 1
 fi
-branch=$(cat $branch)
+#branch=$(cat $branch)
+branch="v1.1.x"
 
 # Check for empty arg1
 if [ "$client" = "" ]; then

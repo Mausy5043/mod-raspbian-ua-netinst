@@ -1,5 +1,5 @@
 # Useful OS extensions
-packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync,sudo"
+packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync"
 
 # Support for `raspdiagd`
 packages="$packages,python,git,gnuplot,mysql-client,python-mysqldb"
@@ -7,6 +7,16 @@ packages="$packages,python,git,gnuplot,mysql-client,python-mysqldb"
 # Handy utilities
 packages="$packages,bc,htop,lsof,nano,screen,stress,dieharder"
 
-hostname=raspberrypi
-cmdline="dwc_otg.lpm_enable=0 console=tty1 noatime loglevel=2 cgroup_enable=memory elevator=noop"
+# My defaults
 boot_volume_label=$hostname
+cmdline="dwc_otg.lpm_enable=0 console=tty1 noatime loglevel=2 cgroup_enable=memory elevator=noop"
+disable_root=1
+gpu_mem=16
+hostname=raspberrypi
+timeserver=2.pool.ntp.org
+timezone=Europe/Amsterdam
+username=pi
+userpw=raspberry
+user_is_admin=1
+locales="en_US.UTF-8 en_US UTF-8"
+system_default_locale=en_US

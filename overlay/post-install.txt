@@ -9,7 +9,7 @@
 
 # This is where we setup variables and stuff that we need later in the script
 
-TIMEZONE="Europe/Amsterdam"
+#TIMEZONE="Europe/Amsterdam"
 LANG="en_US"
 CHARSET="UTF-8"
 LOCALE=$LANG"."$CHARSET
@@ -33,20 +33,20 @@ SRVRIP=boson.lan
 # Here we setup the generic system. Stuff that's needed to get a basic RPI up
 # and running stable.
 
-echo "Setting timezone : "$TIMEZONE
-echo $TIMEZONE > /rootfs/etc/timezone
-cp /rootfs/usr/share/zoneinfo/${TIMEZONE} /rootfs/etc/localtime
+#echo "Setting timezone : "$TIMEZONE
+#echo $TIMEZONE > /rootfs/etc/timezone
+#cp /rootfs/usr/share/zoneinfo/${TIMEZONE} /rootfs/etc/localtime
 
-echo -n "Setting locale : "$LOCALE
-echo "LANG=$LOCALE" >> /rootfs/etc/default/locale
-echo " ... $LOCALEGEN"
-echo "$LOCALEGEN" > /rootfs/etc/locale.gen
-chroot /rootfs /usr/sbin/locale-gen
+#echo -n "Setting locale : "$LOCALE
+#echo "LANG=$LOCALE" >> /rootfs/etc/default/locale
+#echo " ... $LOCALEGEN"
+#echo "$LOCALEGEN" > /rootfs/etc/locale.gen
+#chroot /rootfs /usr/sbin/locale-gen
 
 echo "Setting SSH"
 sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
 # Don't allow root logins
-sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /rootfs/etc/ssh/sshd_config
+# sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /rootfs/etc/ssh/sshd_config
 
 # recreate ssh keys (call me paranoid)
 # echo "Regenerating SSH-keys..."
@@ -90,7 +90,7 @@ echo -n "Modifying systemfiles: "
 
 # get more memory
 echo -n "[/boot/config.txt] "
-echo "gpu_mem=16"         >> /rootfs/boot/config.txt
+#echo "gpu_mem=16"         >> /rootfs/boot/config.txt
 # Scaled CPU frequency
 echo ""                   >> /rootfs/boot/config.txt
 echo "arm_freq=950"       >> /rootfs/boot/config.txt
@@ -108,13 +108,13 @@ echo "force_turbo=0"      >> /rootfs/boot/config.txt
 echo "."
 
 # raspi-copies-and-fills is not available in jessie so we install it here
-echo -n "Installing raspi-copies-and-fills package... "
-chroot /rootfs /usr/bin/apt-get -y install raspi-copies-and-fills &>/dev/null
-if [ $? -eq 0 ]; then
-    echo "OK"
-else
-    echo "FAILED !"
-fi
+#echo -n "Installing raspi-copies-and-fills package... "
+#chroot /rootfs /usr/bin/apt-get -y install raspi-copies-and-fills &>/dev/null
+#if [ $? -eq 0 ]; then
+#    echo "OK"
+#else
+#    echo "FAILED !"
+#fi
 
 
 ####################
@@ -123,13 +123,13 @@ fi
 
 # Here we setup the generic user `pi` and the luser environment.
 
-echo "Creating group : "$INI_GROUP
-chroot /rootfs /usr/sbin/groupadd $INI_GROUP
+#echo "Creating group : "$INI_GROUP
+#chroot /rootfs /usr/sbin/groupadd $INI_GROUP
 
-echo -n "Creating user  : "$USER
-chroot /rootfs /usr/sbin/useradd $USER -s /bin/bash -m -g $INI_GROUP -G $XTRA_GRPS
-echo " ... and setting password as : "$PASS
-echo "$USER:$PASS" | chroot /rootfs /usr/sbin/chpasswd
+#echo -n "Creating user  : "$USER
+#chroot /rootfs /usr/sbin/useradd $USER -s /bin/bash -m -g $INI_GROUP -G $XTRA_GRPS
+#echo " ... and setting password as : "$PASS
+#echo "$USER:$PASS" | chroot /rootfs /usr/sbin/chpasswd
 
 echo "Set-up cron jobs..."
 CRONTMP=$USRHOME/cron.tmp
@@ -144,8 +144,8 @@ echo "hardstatus on" >> /rootfs/$USRHOME/.screenrc
 echo "hardstatus alwayslastline" >> /rootfs/$USRHOME/.screenrc
 echo "hardstatus string \"%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %l %{..Y} %Y-%m-%d %c \"" >> /rootfs/$USRHOME/.screenrc
 
-echo "Set-up sudo..."
-sed -i 's/\%sudo\tALL=(ALL:ALL)/&\ NOPASSWD:/' /rootfs/etc/sudoers
+#echo "Set-up sudo..."
+#sed -i 's/\%sudo\tALL=(ALL:ALL)/&\ NOPASSWD:/' /rootfs/etc/sudoers
 
 echo "Copy configuration files..."
 for f in /bootfs/config/rootfs/*; do
@@ -157,7 +157,10 @@ for f in /bootfs/config/rootfs/*; do
 done
 
 # ssh
-mkdir -m 0700 -p /rootfs/$USRHOME/.ssh
+if [ ! -d /rootfs/$USRHOME/.ssh ]
+  echo "Create .shh folder..."
+  mkdir -m 0700 -p /rootfs/$USRHOME/.ssh
+fi
 
 # GIT
 echo "Create raspboot..."
