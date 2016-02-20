@@ -80,7 +80,6 @@ echo -n "Modifying systemfiles: "
 
 # get more memory
 echo -n "[/boot/config.txt] "
-#echo "gpu_mem=16"         >> /rootfs/boot/config.txt
 # Scaled CPU frequency
 echo ""                   >> /rootfs/boot/config.txt
 echo "arm_freq=950"       >> /rootfs/boot/config.txt
