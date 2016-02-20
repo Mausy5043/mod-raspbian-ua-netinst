@@ -157,7 +157,7 @@ for f in /bootfs/config/rootfs/*; do
 done
 
 # ssh
-if [ ! -d /rootfs/$USRHOME/.ssh ]
+if [ ! -d /rootfs/$USRHOME/.ssh ]; then
   echo "Create .shh folder..."
   mkdir -m 0700 -p /rootfs/$USRHOME/.ssh
 fi
