@@ -9,13 +9,13 @@
 
 # This is where we setup variables and stuff that we need later in the script
 
-LANG="en_US"
-CHARSET="UTF-8"
-LOCALE=$LANG"."$CHARSET
-LOCALEGEN=$LOCALE" "$CHARSET
+#LANG="en_US"
+#CHARSET="UTF-8"
+#LOCALE=$LANG"."$CHARSET
+#LOCALEGEN=$LOCALE" "$CHARSET
 
-INI_GROUP=$USER
-XTRA_GRPS="sudo,adm,users,video,dialout"
+#INI_GROUP=$USER
+XTRA_GRPS="adm,users,video,dialout"
 
 USER="pi"
 USRHOME="home/"$USER
@@ -111,10 +111,8 @@ fi
 #echo "Creating group : "$INI_GROUP
 #chroot /rootfs /usr/sbin/groupadd $INI_GROUP
 
-#echo -n "Creating user  : "$USER
-#chroot /rootfs /usr/sbin/useradd $USER -s /bin/bash -m -g $INI_GROUP -G $XTRA_GRPS
-#echo " ... and setting password as : "$PASS
-#echo "$USER:$PASS" | chroot /rootfs /usr/sbin/chpasswd
+echo -n "Modify user  : "$USER
+chroot /rootfs /usr/sbin/usermod -a -G $XTRA_GRPS $USER
 
 echo "Set-up cron jobs..."
 CRONTMP=$USRHOME/cron.tmp
@@ -157,7 +155,7 @@ echo "Set permissions..."
 chmod -R 0755 /rootfs/$USRHOME/raspboot
 
 echo "Change ownership..."
-chroot /rootfs /bin/chown -R $USER:$INI_GROUP /$USRHOME
+chroot /rootfs /bin/chown -R $USER:$USER /$USRHOME
 
 
 ######################
@@ -181,4 +179,4 @@ date
 sync; sync
 cp $LOGFILE /rootfs/$USRHOME/raspbian-ua-netinst.log
 chmod 0644  /rootfs/$USRHOME/raspbian-ua-netinst.log
-chroot /rootfs /bin/chown $USER:$INI_GROUP /$USRHOME/raspbian-ua-netinst.log
+chroot /rootfs /bin/chown $USER:$USER /$USRHOME/raspbian-ua-netinst.log
