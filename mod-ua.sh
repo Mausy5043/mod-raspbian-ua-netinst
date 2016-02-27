@@ -4,6 +4,12 @@ client=$1
 netinst="../raspbian-ua-netinst"
 branch="../netinst.branch"
 
+# Check for empty arg1
+if [ "$client" = "" ]; then
+  echo "Usage: mod-ua.sh <hostname>"
+  exit 1
+fi
+
 # Check if the `raspbian-ua-netinst` directory is present.
 if [ ! -d $netinst ]; then
   echo "A clone of raspbian-ua-netinst could not be found."
@@ -18,18 +24,11 @@ if [ ! -e $branch ]; then
   echo "Both the branchname of raspbian-ua-netinst and the branchname of mod-raspbian-ua-netinst must be the same."
   exit 1
 fi
-#branch=$(cat $branch)
-branch="v1.1.x"
-
-# Check for empty arg1
-if [ "$client" = "" ]; then
-  echo "Usage: mod-ua.sh <hostname>"
-  exit 1
-fi
+branch=$(cat $branch)
 
 echo ""
 echo "*********"
-echo "Update the mod-ua files..."
+echo "Updating the mod-ua files..."
 echo "*********"
 git pull
 git fetch origin
@@ -39,7 +38,7 @@ git clean -f -d
 
 echo ""
 echo "*********"
-echo "Update the raspbian-ua-netinst files..."
+echo "Updating the raspbian-ua-netinst files..."
 echo "*********"
 pushd $netinst/
   # Check exitcode of prev command.
@@ -54,13 +53,13 @@ popd
 
 echo ""
 echo "*********"
-echo "Put modifications in place"
+echo "Putting modifications in place"
 echo "*********"
 cp -r ./overlay/* $netinst/
 
 echo ""
 echo "*********"
-echo "Building image"
+echo "Building RASPBIAN-UA-NETINST image"
 echo "*********"
 pushd $netinst/
   # Check exitcode of prev command.
