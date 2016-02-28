@@ -17,7 +17,7 @@ timezone=Europe/Amsterdam
 username=pi
 userpw=raspberry
 user_is_admin=1
-locales="en_US.UTF-8 en_US UTF-8"
-system_default_locale=en_US
+locales="en_US.UTF-8"
+system_default_locale="en_US.UTF-8"
 
 boot_volume_label=$hostname
