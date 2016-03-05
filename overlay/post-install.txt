@@ -34,11 +34,6 @@ SRVRIP=boson.lan
 echo "Setting SSH"
 sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
 
-# recreate ssh keys (call me paranoid)
-echo "Regenerating SSH-keys..."
-rm /rootfs/etc/ssh/ssh_host_*
-chroot /rootfs /usr/sbin/dpkg-reconfigure openssh-server
-
 echo "Preparing /etc/hosts file..."
 echo "::1             localhost ip6-localhost ip6-loopback" >> /rootfs/etc/hosts
 echo "fe00::0         ip6-localnet"     >> /rootfs/etc/hosts
