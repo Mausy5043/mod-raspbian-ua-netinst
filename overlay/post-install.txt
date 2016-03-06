@@ -20,7 +20,7 @@ XTRA_GRPS="adm,users,video,dialout"
 USER="pi"
 USRHOME="home/"$USER
 RMTPATH=$hostname/$USRHOME
-# This is the server on my local LAN that holds the backup of /home for this RPi
+# This is the server on my local LAN that holds the fileshares for this RPi
 SRVRIP=boson.lan
 
 
@@ -134,7 +134,7 @@ for f in /bootfs/config/rootfs/*; do
   cp $f /rootfs/$g
 done
 
-# ssh
+# SSH
 if [ ! -d /rootfs/$USRHOME/.ssh ]; then
   echo "Create .shh folder..."
   mkdir -m 0700 -p /rootfs/$USRHOME/.ssh
