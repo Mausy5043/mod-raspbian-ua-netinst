@@ -9,19 +9,10 @@
 
 # This is where we setup variables and stuff that we need later in the script
 
-#LANG="en_US"
-#CHARSET="UTF-8"
-#LOCALE=$LANG"."$CHARSET
-#LOCALEGEN=$LOCALE" "$CHARSET
-
-#INI_GROUP=$USER
+USER=$username
 XTRA_GRPS="adm,users,video,dialout"
-
-USER="pi"
 USRHOME="home/"$USER
 RMTPATH=$hostname/$USRHOME
-# This is the server on my local LAN that holds the fileshares for this RPi
-SRVRIP=boson.lan
 
 
 ######################
@@ -31,7 +22,7 @@ SRVRIP=boson.lan
 # Here we setup the generic system. Stuff that's needed to get a basic RPI up
 # and running stable.
 
-echo "Setting SSH"
+echo "Setting SSH option"
 sed -i 's/AcceptEnv LANG LC_*/#&/' /rootfs/etc/ssh/sshd_config
 
 echo "Preparing /etc/hosts file..."
@@ -51,23 +42,17 @@ sed -i 's/6:23:respawn/\#&/'  /rootfs/etc/inittab
 sed -i 's/T0:23:respawn/\#&/' /rootfs/etc/inittab
 
 # Don't need sound
-echo "Disabling sound"
+echo "Disabling sound..."
 sed -i 's/snd-bcm/\#&/'       /rootfs/etc/modules
 
 echo "Creating extra mountpoints..."
 mkdir -p /rootfs/mnt/share1
 mkdir -p /rootfs/mnt/backup
 # mount /var/log and /tmp as tmpfs; /tmp is already added in raspbian-ua-netinst
-# echo "tmpfs /tmp     tmpfs nodev,nosuid,mode=1777,size=64M              0 0" >> /rootfs/etc/fstab
 echo "tmpfs /var/log tmpfs defaults,noatime,nosuid,mode=0755,size=96M  0 0" >> /rootfs/etc/fstab
 echo "# mountpoint for systemlogs and backups" >> /rootfs/etc/fstab
 echo "boson.lan:/srv/array1/backup /mnt/backup nfs4 nouser,atime,rw,dev,exec,suid,noauto 0   0" >> /rootfs/etc/fstab
 echo "boson.lan:/srv/array1/dataspool /mnt/share1 nfs4 nouser,atime,rw,dev,exec,suid,auto 0  0" >> /rootfs/etc/fstab
-
-#echo -n "Modifying systemfiles: "
-# to get nfs working we need to blacklist a module
-#echo -n "[/etc/modprobe.d/$hostname-blacklist.conf] "
-#echo "blacklist rpcsec_gss_krb5" > "/rootfs/etc/modprobe.d/$hostname-blacklist.conf"
 
 # get more memory
 echo -n "[/boot/config.txt] "
@@ -103,9 +88,6 @@ fi
 
 # Here we setup the generic user `pi` and the luser environment.
 
-#echo "Creating group : "$INI_GROUP
-#chroot /rootfs /usr/sbin/groupadd $INI_GROUP
-
 echo -n "Modify user  : "$USER
 chroot /rootfs /usr/sbin/usermod -a -G $XTRA_GRPS $USER
 
@@ -114,13 +96,6 @@ CRONTMP=$USRHOME/cron.tmp
 echo "50 23 * * * $USRHOME/bin/backuphome.sh" >> /rootfs/$CRONTMP
 chroot /rootfs /usr/bin/crontab -u $USER /$CRONTMP
 rm /rootfs/$CRONTMP
-
-# default settings for screen
-echo "shell -\$SHELL" > /rootfs/$USRHOME/.screenrc
-echo "defscrollback 10000" >> /rootfs/$USRHOME/.screenrc
-echo "hardstatus on" >> /rootfs/$USRHOME/.screenrc
-echo "hardstatus alwayslastline" >> /rootfs/$USRHOME/.screenrc
-echo "hardstatus string \"%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %l %{..Y} %Y-%m-%d %c \"" >> /rootfs/$USRHOME/.screenrc
 
 echo "Set-up sudo..."
 echo -n "$USER ALL = (ALL) NOPASSWD: ALL" > "/rootfs/etc/sudoers.d/$USER"
@@ -141,15 +116,15 @@ if [ ! -d /rootfs/$USRHOME/.ssh ]; then
 fi
 
 # GIT
-echo "Create raspboot..."
-mkdir /rootfs/$USRHOME/raspboot
-echo "Pull sources from github..."
+echo "Set-up raspboot..."
+mkdir -p /rootfs/$USRHOME/raspboot
+echo "  Pull sources from github..."
 chroot /rootfs /usr/bin/git clone -b master https://github.com/Mausy5043/raspboot.git /$USRHOME/raspboot
 echo "master" > /rootfs/$USRHOME/.raspboot.branch
-echo "Set permissions..."
+echo "  Set permissions..."
 chmod -R 0755 /rootfs/$USRHOME/raspboot
 
-echo "Change ownership..."
+echo "Change ownership of files in $USRHOME..."
 chroot /rootfs /bin/chown -R $USER:$USER /$USRHOME
 
 
@@ -172,6 +147,7 @@ echo -n "********** SYSTEM READY **********"
 date
 # put the logfile somewhere we can find it, so we can mount /var/log with tmpfs
 sync; sync
-cp $LOGFILE /rootfs/$USRHOME/raspbian-ua-netinst.log
-chmod 0644  /rootfs/$USRHOME/raspbian-ua-netinst.log
-chroot /rootfs /bin/chown $USER:$USER /$USRHOME/raspbian-ua-netinst.log
+LOGTARGET=$USRHOME/installer.log
+cp $LOGFILE /rootfs/$LOGTARGET
+chmod 0644  /rootfs/$LOGTARGET
+chroot /rootfs /bin/chown $USER:$USER /$LOGTARGET
