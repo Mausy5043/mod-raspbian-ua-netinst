@@ -90,6 +90,7 @@ fi
 
 echo -n "Modify user  : "$USER
 chroot /rootfs /usr/sbin/usermod -a -G $XTRA_GRPS $USER
+echo " "
 
 echo "Set-up cron jobs..."
 CRONTMP=$USRHOME/cron.tmp
