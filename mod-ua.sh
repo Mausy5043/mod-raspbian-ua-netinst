@@ -55,7 +55,9 @@ echo ""
 echo "*********"
 echo "Putting modifications in place"
 echo "*********"
-cp -r ./overlay/* $netinst/
+cp -rv ./overlay/* $netinst/
+mkdir -p $netinst/config/installer
+cp -rv $netinst/scripts/etc/init.d/rcS $netinst/config/installer/rcS
 
 echo ""
 echo "*********"
