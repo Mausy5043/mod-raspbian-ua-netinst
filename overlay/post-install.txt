@@ -94,7 +94,7 @@ echo " "
 
 echo "Set-up cron jobs..."
 CRONTMP=$USRHOME/cron.tmp
-echo "50 23 * * * $USRHOME/bin/backuphome.sh" >> /rootfs/$CRONTMP
+echo "50 23 * * * /$USRHOME/bin/backuphome.sh" >> /rootfs/$CRONTMP
 chroot /rootfs /usr/bin/crontab -u $USER /$CRONTMP
 rm /rootfs/$CRONTMP
 
