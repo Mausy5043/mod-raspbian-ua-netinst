@@ -92,12 +92,6 @@ echo -n "Modify user  : "$USER
 chroot /rootfs /usr/sbin/usermod -a -G $XTRA_GRPS $USER
 echo " "
 
-echo "Set-up cron jobs..."
-CRONTMP=$USRHOME/cron.tmp
-echo "50 23 * * * /$USRHOME/bin/backuphome.sh" >> /rootfs/$CRONTMP
-chroot /rootfs /usr/bin/crontab -u $USER /$CRONTMP
-rm /rootfs/$CRONTMP
-
 echo "Set-up sudo..."
 echo -n "$USER ALL = (ALL) NOPASSWD: ALL" > "/rootfs/etc/sudoers.d/$USER"
 
