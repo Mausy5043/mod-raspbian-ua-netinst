@@ -2,7 +2,7 @@
 packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync"
 
 # Support for `raspdiagd`
-packages="$packages,python,git,gnuplot,mysql-client,python-mysqldb"
+packages="$packages,python,git,gnuplot,gnuplot-nox,mysql-client,python-mysqldb"
 packages="$packages,lftp"
 
 # Handy utilities
