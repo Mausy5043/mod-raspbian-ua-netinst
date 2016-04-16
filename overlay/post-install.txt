@@ -63,7 +63,7 @@ echo "core_freq=450"      >> /rootfs/boot/config.txt
 echo "sdram_freq=450"     >> /rootfs/boot/config.txt
 echo "over_voltage=6"     >> /rootfs/boot/config.txt
 echo ""                   >> /rootfs/boot/config.txt
-echo "arm_freq_min=700"   >> /rootfs/boot/config.txt
+echo "arm_freq_min=500"   >> /rootfs/boot/config.txt
 echo "core_freq_min=250"  >> /rootfs/boot/config.txt
 echo "sdram_freq_min=400" >> /rootfs/boot/config.txt
 echo "over_voltage_min=0" >> /rootfs/boot/config.txt
