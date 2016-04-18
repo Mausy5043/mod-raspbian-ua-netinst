@@ -1,12 +1,14 @@
 #! /bin/bash
 
 client=$1
+wifi=$2
 netinst="../raspbian-ua-netinst"
 branch="../netinst.branch"
+wpa="../wpa.conf"
 
 # Check for empty arg1
 if [ "$client" = "" ]; then
-  echo "Usage: mod-ua.sh <hostname>"
+  echo "Usage: mod-ua.sh <hostname> [-wifi]"
   exit 1
 fi
 
@@ -57,7 +59,12 @@ echo "Putting modifications in place"
 echo "*********"
 cp -rv ./overlay/* $netinst/
 mkdir -p $netinst/config/installer
-cp -rv $netinst/scripts/etc/init.d/rcS $netinst/config/installer/rcS
+#cp -rv $netinst/scripts/etc/init.d/rcS $netinst/config/installer/rcS
+if [ $wifi -eq "-wifi" ]
+  echo "   adding wpa_supplicant.conf to installer"
+  echo "ifname=wlan0" >> $netinst/config/installer-config.txt
+  cp -rv $wpa $netinst/config/wpa_supplicant.conf
+fi
 
 echo ""
 echo "*********"
