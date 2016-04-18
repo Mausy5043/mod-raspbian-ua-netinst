@@ -60,7 +60,7 @@ echo "*********"
 cp -rv ./overlay/* $netinst/
 mkdir -p $netinst/config/installer
 #cp -rv $netinst/scripts/etc/init.d/rcS $netinst/config/installer/rcS
-if [ $wifi -eq "-wifi" ]
+if [[ $wifi -eq "-wifi" ]]; then
   echo "   adding wpa_supplicant.conf to installer"
   echo "ifname=wlan0" >> $netinst/config/installer-config.txt
   cp -rv $wpa $netinst/config/wpa_supplicant.conf
