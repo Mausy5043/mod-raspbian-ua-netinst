@@ -1,7 +1,7 @@
 #! /bin/bash
 
 client=$1
-#wifi=$2
+wifi=$2
 netinst="../raspbian-ua-netinst"
 branch="../netinst.branch"
 wpa="../wpa.conf"
@@ -60,11 +60,12 @@ echo "*********"
 cp -rv ./overlay/* $netinst/
 mkdir -p $netinst/config/installer
 #cp -rv $netinst/scripts/etc/init.d/rcS $netinst/config/installer/rcS
-#if [[ $wifi == "-wifi" ]]; then
-#  echo "   adding wpa_supplicant.conf to installer"
-#  echo "ifname=wlan0" >> $netinst/installer-config.txt
-#  cp -rv $wpa $netinst/config/wpa_supplicant.conf
-#fi
+if [ $wifi == "-wifi" ]; then
+  echo "   ...adding wpa_supplicant.conf to installer!"
+  echo "ifname=wlan0"           >> $netinst/installer-config.txt
+  echo "drivers_to_load=8192cu" >> $netinst/installer-config.txt
+  cp -rv $wpa $netinst/config/wpa_supplicant.conf
+fi
 
 echo ""
 echo "*********"
