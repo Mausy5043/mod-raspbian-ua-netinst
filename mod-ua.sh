@@ -30,16 +30,6 @@ branch=$(cat $branch)
 
 echo ""
 echo "*********"
-echo "Updating the mod-ua files..."
-echo "*********"
-git pull
-git fetch origin
-git checkout "$branch"
-git reset --hard "origin/$branch" && \
-git clean -f -d
-
-echo ""
-echo "*********"
 echo "Updating the raspbian-ua-netinst files..."
 echo "*********"
 pushd $netinst/
