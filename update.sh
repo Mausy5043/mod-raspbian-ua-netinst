@@ -23,3 +23,4 @@ git fetch origin
 git checkout "$branch"
 git reset --hard "origin/$branch" && \
 git clean -f -d
+chmod +x *.sh
