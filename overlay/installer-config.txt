@@ -1,5 +1,5 @@
 # Useful OS extensions
-packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync"
+packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync,lsb-release"
 
 # Support for `raspdiagd`
 packages="$packages,python,git"
