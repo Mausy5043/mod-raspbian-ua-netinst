@@ -1,3 +1,5 @@
 set ssl:verify-certificate no
 set ftp:timezone ""
 set net:timeout 30
+set net:max-retries 2
+set cmd:fail-exit yes
