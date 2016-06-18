@@ -106,7 +106,7 @@ done
 
 # SSH
 if [ ! -d /rootfs/$USRHOME/.ssh ]; then
-  echo "Create .shh folder..."
+  echo "Create ~/.ssh folder..."
   mkdir -m 0700 -p /rootfs/$USRHOME/.ssh
 fi
 
