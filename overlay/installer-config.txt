@@ -1,5 +1,5 @@
 # Useful OS extensions
-packages="apt-utils,logrotate,raspi-copies-and-fills,rsync,lsb-release"
+packages="apt-utils,logrotate,raspi-copies-and-fills,rsync,lsb-release,nfs-common"
 
 # Handy utilities
 packages="$packages,bc,dieharder,htop,lsof,nano,screen,stress,tree,git"
