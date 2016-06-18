@@ -1,9 +1,5 @@
 # Useful OS extensions
-packages="apt-utils,logrotate,nfs-common,raspi-copies-and-fills,rsync"
-
-# Support for `raspdiagd`
-packages="$packages,python,git"
-packages="$packages,lftp"
+packages="apt-utils,logrotate,raspi-copies-and-fills,rsync,lsb-release"
 
 # Handy utilities
 packages="$packages,bc,dieharder,htop,lsof,nano,screen,stress,tree"
