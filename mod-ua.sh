@@ -1,16 +1,30 @@
 #! /bin/bash
 
-client=$1
-wifi=$2
+GOPTS=`getopt -n 'mod-ua.sh' -o n:w --long name:,wifi -- "$@"`
+
+if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; exit 1 ; fi
+
+echo "$GOPTS"
+eval set -- "$GOPTS"
+
+WIFI=false
+NAME="raspberrypi"
+
+while true; do
+  case "$1" in
+    -w | --wifi ) WIFI=true; shift ;;
+    -n | --name ) CLIENT="$2"; shift; shift ;;
+    -- ) shift; break ;;
+    * ) break ;;
+  esac
+done
+
+echo WIFI="$WIFI"
+echo NAME="$NAME"
+
 netinst="../raspbian-ua-netinst"
 branch="../netinst.branch"
 wpa="../wpa.conf"
-
-# Check for empty arg1
-if [ "$client" = "" ]; then
-  echo "Usage: mod-ua.sh <hostname> [-wifi]"
-  exit 1
-fi
 
 # Check if the `raspbian-ua-netinst` directory is present.
 if [ ! -d $netinst ]; then
@@ -49,8 +63,8 @@ echo "Putting modifications in place"
 echo "*********"
 cp -rv ./overlay/* $netinst/
 mkdir -p $netinst/config/installer
-#cp -rv $netinst/scripts/etc/init.d/rcS $netinst/config/installer/rcS
-if [ "$wifi" == "-wifi" ]; then
+
+if [ "$WIFI" == true ]; then
   echo "   ...adding wpa_supplicant.conf to installer!"
   echo "ifname=wlan0"           >> $netinst/installer-config.txt
   echo "drivers_to_load=8192cu" >> $netinst/installer-config.txt
@@ -66,15 +80,15 @@ pushd $netinst/
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
   sed -i "s/raspberrypi/${client}/" ./installer-config.txt
-  
+
   echo
   echo "*** Cleaning the installer ***"
   ./clean.sh
-  
+
   echo
   echo "*** Updating the packages for the installer ***"
   ./update.sh
-  
+
   echo
   echo "*** Building the installer ***"
   ./build.sh
