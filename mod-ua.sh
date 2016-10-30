@@ -4,11 +4,10 @@ GOPTS=`getopt -n 'mod-ua.sh' -o n:w --long name:,wifi -- "$@"`
 
 if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; exit 1 ; fi
 
-echo "$GOPTS"
 eval set -- "$GOPTS"
 
 WIFI=false
-NAME="raspberrypi"
+CLIENT="raspberrypi"
 
 while true; do
   case "$1" in
@@ -19,8 +18,10 @@ while true; do
   esac
 done
 
+echo
 echo WIFI="$WIFI"
-echo NAME="$NAME"
+echo NAME="$CLIENT"
+echo
 
 netinst="../raspbian-ua-netinst"
 branch="../netinst.branch"
@@ -79,7 +80,7 @@ pushd $netinst/
   # Check exitcode of prev command.
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
-  sed -i "s/raspberrypi/${client}/" ./installer-config.txt
+  sed -i "s/raspberrypi/${CLIENT}/" ./installer-config.txt
 
   echo
   echo "*** Cleaning the installer ***"
