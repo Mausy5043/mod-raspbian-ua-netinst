@@ -66,8 +66,17 @@ pushd $netinst/
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
   sed -i "s/raspberrypi/${client}/" ./installer-config.txt
+  
+  echo
+  echo "*** Cleaning the installer ***"
   ./clean.sh
+  
+  echo
+  echo "*** Updating the packages for the installer ***"
   ./update.sh
+  
+  echo
+  echo "*** Building the installer ***"
   ./build.sh
   # By default don't `./buildroot`
   #./buildroot.sh
