@@ -48,6 +48,7 @@ sed -i 's/snd-bcm/\#&/'       /rootfs/etc/modules
 echo "Creating extra mountpoints..."
 mkdir -p /rootfs/mnt/share1
 mkdir -p /rootfs/mnt/backup
+mkdir -p /rootfs/home/pi/bin
 # mount /var/log and /tmp as tmpfs; /tmp is already added in raspbian-ua-netinst
 echo "tmpfs /var/log tmpfs defaults,noatime,nosuid,mode=0755,size=96M  0 0" >> /rootfs/etc/fstab
 echo "# mountpoint for systemlogs and backups" >> /rootfs/etc/fstab
