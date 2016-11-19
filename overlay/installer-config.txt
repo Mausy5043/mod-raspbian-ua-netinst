@@ -9,6 +9,7 @@ cmdline="dwc_otg.lpm_enable=0 console=tty1 noatime loglevel=2 cgroup_enable=memo
 disable_root=1
 gpu_mem=16
 hostname=raspberrypi
+rootfstype=f2fs
 timeserver=2.pool.ntp.org
 timezone=Europe/Amsterdam
 username=pi
