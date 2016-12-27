@@ -2,7 +2,7 @@
 packages="apt-utils,logrotate,raspi-copies-and-fills,rsync,lsb-release,nfs-common,f2fs-tools"
 
 # Handy utilities
-packages="$packages,bc,dieharder,git,htop,lsof,nano,psmisc,screen,stress,tree"
+packages="$packages,bc,dieharder,git,htop,lsof,nano,psmisc,screen,stress,tree,curl,zip"
 
 # My defaults
 cmdline="dwc_otg.lpm_enable=0 console=tty1 noatime loglevel=2 cgroup_enable=memory elevator=noop"
