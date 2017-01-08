@@ -1,10 +1,10 @@
 # mod-raspbian-ua-netinst
-Custom changes to `debian-pi\raspbian-ua-netinst`.
+Custom changes to `debian-pi/raspbian-ua-netinst`.
 
-Holds the custom files that I need to build my own image of `debian-pi\raspbian-ua-netinst`.
+Holds the custom files that I need to build my own image of `debian-pi/raspbian-ua-netinst`.
 
 Requirements:
-- A clone of the repository `debian-pi\raspbian-ua-netinst` is present in the
+- A clone of the repository `debian-pi/raspbian-ua-netinst` is present in the
 same directory as where this repository resides:
 
 ```
@@ -23,8 +23,8 @@ same directory as where this repository resides:
 ```
 
 ## Installing
-1. Clone `debian-pi\raspbian-ua-netinst`
-2. Clone `Mausy5043\mod-raspbian-ua-netinst`
+1. Clone `debian-pi/raspbian-ua-netinst`
+2. Clone `Mausy5043/mod-raspbian-ua-netinst`
 3. `echo "v1.1.x" > netinst.branch   # this defines the branch to be used`
 
 ## Usage
