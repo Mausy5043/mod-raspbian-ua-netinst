@@ -75,9 +75,6 @@ if [ "$WIFI" == true ]; then
   echo "drivers_to_load=8192cu" >> $netinst/installer-config.txt
   cp -rv $wpa $netinst/config/wpa_supplicant.conf
 fi
-echo "change to 4.9 kernel"
-sed -i "s/4.4.0-1-rpi/4.9.0-2-rpi/" $netinst/build.sh
-sed -i "s/4.4.0-1-rpi/4.9.0-2-rpi/" $netinst/update.sh
 
 echo ""
 echo ""
